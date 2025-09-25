@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { auth_controllers } from "./auth.controller";
-import RequestValidator from "../../middlewares/request_validator";
-import { auth_validation } from "./auth.validation";
 import auth from "../../middlewares/auth";
+import RequestValidator from "../../middlewares/request_validator";
+import { auth_controllers } from "./auth.controller";
+import { auth_validation } from "./auth.validation";
 
 const authRoute = Router()
 
@@ -11,14 +11,14 @@ authRoute.post("/login", RequestValidator(auth_validation.login_validation), aut
 
 authRoute.get(
     '/me',
-    auth("ADMIN", "USER"),
+    auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"),
     auth_controllers.get_my_profile,
 );
 
 authRoute.post('/refresh-token', auth_controllers.refresh_token);
 authRoute.post(
     '/change-password',
-    auth("ADMIN", "USER"),
+    auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"),
     RequestValidator(auth_validation.changePassword),
     auth_controllers.change_password,
 );
@@ -33,14 +33,4 @@ authRoute.post(
     auth_controllers.reset_password,
 );
 
-authRoute.post(
-    "/verified-account",
-    RequestValidator(auth_validation.verified_account),
-    auth_controllers.verified_account
-)
-authRoute.post(
-    "/new-verification-link",
-    RequestValidator(auth_validation.forgotPassword),
-    auth_controllers.get_new_verification_link
-)
 export default authRoute;

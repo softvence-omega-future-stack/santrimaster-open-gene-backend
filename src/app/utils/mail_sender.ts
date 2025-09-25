@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 // ✅ Email Sender Function
 const sendMail = async (payload: TMailContent) => {
     const info = await transporter.sendMail({
-        from: 'info@digitalcreditai.com',
+        from: 'mypcmail093@gmail.com',
         to: payload.to,
         subject: payload.subject,
         text: payload.textBody,

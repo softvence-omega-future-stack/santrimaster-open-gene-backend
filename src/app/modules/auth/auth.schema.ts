@@ -1,19 +1,46 @@
-import { model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { TAccount } from "./auth.interface";
 
 
-const authSchema = new Schema<TAccount>({
-    email: { type: String, required: true },
+const AccountSchema = new Schema<TAccount>({
+    fullName: { type: String, required: true },
+    affiliation: { type: String, required: true },
+    orcid: { type: String, required: true },
+    bio: { type: String },
+    email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
-    lastPasswordChange: { type: String },
+    profileImage: { type: String },
+    lastLoginTime: { type: Date },
+    lastPasswordChange: { type: Date },
     isDeleted: { type: Boolean, default: false },
-    accountStatus: { type: String, default: "ACTIVE" },
-    role: { type: String, default: "USER" },
-    isVerified: { type: Boolean, default: false }
-}, {
-    versionKey: false,
-    timestamps: true
-});
+    accountStatus: {
+        type: String,
+        enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
+        default: "ACTIVE",
+    },
+    isTermAgree: { type: Boolean, default: false },
+    role: {
+        type: String,
+        enum: [
+            "GUEST",
+            "RESEARCHER",
+            "CLINICIAN",
+            "ENGINEER",
+            "REVIEWER",
+            "DONAR",
+            "ADMIN",
+        ],
+        default: "GUEST",
+    },
+    additionalInfo: {
+        motivation: { type: String },
+        experience: { type: String },
+        resume: { type: String },
+        googleScholar: { type: String },
+        portfolio: { type: String },
+        availability: { type: String },
+        isAgree: { type: Boolean, default: false },
+    },
+}, { timestamps: true ,versionKey: false});
 
-
-export const Account_Model = model("account", authSchema)
+export const AccountModel = mongoose.model<TAccount>("account", AccountSchema);

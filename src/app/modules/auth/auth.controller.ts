@@ -1,15 +1,15 @@
+import httpStatus from 'http-status';
 import { configs } from "../../configs";
 import catchAsync from "../../utils/catch_async";
 import manageResponse from "../../utils/manage_response";
 import { auth_services } from "./auth.service";
-import httpStatus from 'http-status';
 
 const register_user = catchAsync(async (req, res) => {
     const result = await auth_services.register_user_into_db(req?.body)
     manageResponse(res, {
         success: true,
-        message: "Account created successful",
-        statusCode: httpStatus.OK,
+        message: "Account registration successful",
+        statusCode: httpStatus.CREATED,
         data: result
     })
 })
@@ -18,6 +18,10 @@ const login_user = catchAsync(async (req, res) => {
     const result = await auth_services.login_user_from_db(req.body);
 
     res.cookie('refreshToken', result.refreshToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
+      res.cookie('accessToken', result.accessToken, {
         secure: configs.env == 'production',
         httpOnly: true,
     });
@@ -92,26 +96,6 @@ const reset_password = catchAsync(async (req, res) => {
     });
 });
 
-const verified_account = catchAsync(async (req, res) => {
-    const result = await auth_services.verified_account_into_db(req?.body?.token)
-
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Account Verification successful.",
-        data: result
-    })
-})
-
-const get_new_verification_link = catchAsync(async (req, res) => {
-    const result = await auth_services.get_new_verification_link_from_db(req?.body?.email)
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "New Verification link is send on email.",
-        data: result
-    })
-})
 
 export const auth_controllers = {
     register_user,
@@ -120,7 +104,5 @@ export const auth_controllers = {
     refresh_token,
     change_password,
     reset_password,
-    forget_password,
-    verified_account,
-    get_new_verification_link
+    forget_password
 }

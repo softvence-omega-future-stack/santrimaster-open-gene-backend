@@ -4,7 +4,10 @@ import { z } from "zod";
 const register_validation = z.object({
     email: z.string({ message: "Email is required" }).email(),
     password: z.string({ message: "Password is required" }),
-    name: z.string({ message: "Name is required" })
+    fullName: z.string({ message: "Name is required" }),
+    affiliation: z.string({ message: "Affiliation is required" }),
+    orcid: z.string({ message: "Orcid is required" }),
+    isTermAgree: z.boolean().optional(),
 });
 
 const login_validation = z.object({
@@ -23,15 +26,11 @@ const resetPassword = z.object({
     newPassword: z.string(),
     email: z.string()
 })
-const verified_account = z.object({
-    token: z.string({ message: "Token is Required!!" })
-})
 
 export const auth_validation = {
     register_validation,
     login_validation,
     changePassword,
     forgotPassword,
-    resetPassword,
-    verified_account
+    resetPassword
 }
