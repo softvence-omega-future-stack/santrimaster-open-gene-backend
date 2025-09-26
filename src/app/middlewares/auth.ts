@@ -12,7 +12,6 @@ const auth = (...roles: Role[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             const token = req.headers.authorization || req.cookies['accessToken'];
-            console.log(token)
             if (!token) {
                 throw new AppError('You are not authorize!!', 401);
             }

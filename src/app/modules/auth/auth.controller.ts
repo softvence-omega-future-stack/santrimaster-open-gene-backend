@@ -14,6 +14,16 @@ const register_user = catchAsync(async (req, res) => {
     })
 })
 
+const update_profile = catchAsync(async (req, res) => {
+    const result = await auth_services.update_profile_into_db(req)
+    manageResponse(res, {
+        success: true,
+        message: "Profile update successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+})
+
 const login_user = catchAsync(async (req, res) => {
     const result = await auth_services.login_user_from_db(req.body);
 
@@ -104,5 +114,6 @@ export const auth_controllers = {
     refresh_token,
     change_password,
     reset_password,
-    forget_password
+    forget_password,
+    update_profile
 }

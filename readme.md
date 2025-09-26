@@ -19,6 +19,7 @@ Live URL: *https://*
         - [Forgot Password](#forgot-password)
         - [Reset Password](#reset-password)
         - [Get My Profile](#get-my-profile)
+        - [Update Profile](#update-profile)
 
 
  ---
@@ -224,6 +225,39 @@ export type TAccount = {
         "updatedAt": "2025-09-25T10:49:24.723Z",
         "lastLoginTime": "2025-09-25T10:49:24.722Z",
         "lastPasswordChange": "2025-09-25T10:41:42.000Z"
+    },
+    "meta": null
+}
+```
+
+#### Update Profile
+---
+*Method*: `PATCH` <br/>
+*Path*: `/auth/register` <br/>
+
+`Request body` - Multipart form data <br/>
+
+
+| Name     | Type   | Description     |
+|----------|--------|-----------------|
+| image | File  | any type of image  |
+|data | Object  | example object  |
+
+
+```json
+{
+    "fullName": "string",
+    // note that : email is not changeable
+}
+``` 
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Profile update successful",
+    "data": {
+        ... // your updated data
     },
     "meta": null
 }

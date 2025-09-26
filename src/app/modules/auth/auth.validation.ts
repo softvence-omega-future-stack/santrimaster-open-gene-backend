@@ -10,6 +10,13 @@ const register_validation = z.object({
     isTermAgree: z.boolean().optional(),
 });
 
+const update_validation = z.object({
+    fullName: z.string().optional(),
+    affiliation: z.string().optional(),
+    orcid: z.string().optional(),
+    bio: z.string().optional(),
+});
+
 const login_validation = z.object({
     email: z.string({ message: "Email is required" }),
     password: z.string({ message: "Email is required" })
@@ -32,5 +39,6 @@ export const auth_validation = {
     login_validation,
     changePassword,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    update_validation
 }

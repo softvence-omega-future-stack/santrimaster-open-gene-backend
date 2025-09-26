@@ -23,5 +23,11 @@ export const configs = {
         cloud_name: process.env.CLOUD_NAME,
         cloud_api_key: process.env.CLOUD_API_KEY,
         cloud_api_secret: process.env.CLOUD_API_SECRET
+    },
+    aws:{
+        region: process.env.AWS_REGION,
+        accessKey: process.env.AWS_ACCESS_KEY,
+        secret: process.env.AWS_SECRET,
+        bucketName: process.env.AWS_BUCKET
     }
 }
