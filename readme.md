@@ -9,6 +9,8 @@ Live URL: *https://*
 
 - [Data Types](#data-types)
     - [Account Model](#account-model)
+    - [Protocol Model](#protocol-model)
+    - [Message Model](#message-model)
 
 
 - [API Endpoints](#api-endpoints)
@@ -20,6 +22,9 @@ Live URL: *https://*
         - [Reset Password](#reset-password)
         - [Get My Profile](#get-my-profile)
         - [Update Profile](#update-profile)
+    - [Message Endpoints](#message-endpoints)
+        - [Send Message](#send-message)
+        - [Get All Messages](#get-all-messages)
 
 
  ---
@@ -56,6 +61,61 @@ export type TAccount = {
 }
 
 ```
+
+### Protocol Model
+```ts
+export type TProtocol = {
+    _id: Types.ObjectId,
+    protocolTitle: string,
+    protocolDescription: string,
+    category: string,
+    tags: string[],
+    technique: string,
+    modality: string,
+    organism: string,
+    phase: string,
+    estimatedTime: string,
+    difficulty: string,
+    bslLevel: string,
+    materials?: {
+        itemName: string,
+        quantity: number,
+        catalog: string,
+        supplier: string,
+    }[],
+    equipment?: {
+        equipmentName: string,
+        note: string
+    }[],
+    doiLink?: string,
+    additionalReference?: string,
+    stepProcedure: string,
+    attachment?: string,
+    license: string,
+    authors: Types.ObjectId,
+    coAuthors?: Types.ObjectId[],
+    isConfirmed: boolean,
+    isAcknowledged: boolean,
+    isConfidential: boolean,
+    createdAt: Date,
+    updatedAt: Date
+}
+```
+### Message Model
+```ts
+export type TMessage = {
+    _id: Types.ObjectId
+    fullName: string;
+    email: string;
+    subject: string;
+    message: string;
+    attachments?: string
+    isTermAgreed: boolean,
+    createdAt: Date,
+    updatedAt: Date
+};
+```
+
 
 ## API Endpoints
 
@@ -241,7 +301,7 @@ export type TAccount = {
 | Name     | Type   | Description     |
 |----------|--------|-----------------|
 | image | File  | any type of image  |
-|data | Object  | example object  |
+|data | Text  | example object  |
 
 
 ```json
@@ -260,5 +320,90 @@ export type TAccount = {
         ... // your updated data
     },
     "meta": null
+}
+```
+
+### Message Endpoints
+
+#### Send Message
+---
+*Method*: `POST` <br/>
+*Path*: `/message` <br/>
+
+`Request body` - Multipart form data <br/>
+
+| Name     | Type   | Description     |
+|----------|--------|-----------------|
+| image | File  | any type of image  |
+|data | Text  | example object  |
+
+
+
+```json
+{
+    "fullName": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "subject": "Inquiry about product",
+    "message": "Hi, I would like more information about your product.",
+    "isTermAgreed": true
+}
+``` 
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Message sent successfully!",
+    "data": {
+        "fullName": "Alice Johnson",
+        "email": "alice.johnson@example.com",
+        "subject": "Inquiry about product",
+        "message": "Hi, I would like more information about your product.",
+        "attachments": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758870101041-Screenshot%202025-08-28%20124535.png",
+        "isTermAgreed": true,
+        "_id": "68d63a57ff15bcca2840c854",
+        "createdAt": "2025-09-26T07:01:43.487Z",
+        "updatedAt": "2025-09-26T07:01:43.487Z",
+        "__v": 0
+    },
+    "meta": null
+}
+```
+
+#### Get All Messages
+---
+*Method*: `GET` <br/>
+*Path*: `/message` <br/>
+*Header*: `Authorization / cookie` // Only admin access this<br/>
+
+`Query Params` - page and limit <br/>
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Message sent successfully!",
+    "data": {
+        "result": [
+            {
+                "_id": "68d63a57ff15bcca2840c854",
+                "fullName": "Alice Johnson",
+                "email": "alice.johnson@example.com",
+                "subject": "Inquiry about product",
+                "message": "Hi, I would like more information about your product.",
+                "attachments": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758870101041-Screenshot%202025-08-28%20124535.png",
+                "isTermAgreed": true,
+                "createdAt": "2025-09-26T07:01:43.487Z",
+                "updatedAt": "2025-09-26T07:01:43.487Z",
+                "__v": 0
+            }         
+        ],
+    },
+    "meta": {
+        "page": null,
+        "limit": null,
+        "total": 3,
+        "totalPages": null
+    }
 }
 ```
