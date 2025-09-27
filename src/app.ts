@@ -1,20 +1,21 @@
-import express, { Request, Response } from 'express'
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import globalErrorHandler from './app/middlewares/global_error_handler'
-import notFound from './app/middlewares/not_found_api'
-import cookieParser from 'cookie-parser'
-import appRouter from './routes'
+import express, { Request, Response } from 'express';
+import globalErrorHandler from './app/middlewares/global_error_handler';
+import notFound from './app/middlewares/not_found_api';
 import { handleStripeWebhook } from './app/modules/donation/donation.controller';
+import appRouter from './routes';
 
 // define app
 const app = express()
 app.use(cors({
-    origin: ["http://localhost:3000","http://localhost:3001","http://localhost:5173","http://localhost:5174"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5173"],
+    credentials: true
 }))
 app.use(
-  "/api/payment/webhook",
-  express.raw({ type: "application/json" }),
-  handleStripeWebhook
+    "/api/payment/webhook",
+    express.raw({ type: "application/json" }),
+    handleStripeWebhook
 );
 
 // middleware
