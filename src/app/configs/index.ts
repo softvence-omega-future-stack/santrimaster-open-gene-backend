@@ -24,7 +24,7 @@ export const configs = {
         cloud_api_key: process.env.CLOUD_API_KEY,
         cloud_api_secret: process.env.CLOUD_API_SECRET
     },
-    aws:{
+    aws: {
         region: process.env.AWS_REGION,
         accessKey: process.env.AWS_ACCESS_KEY,
         secret: process.env.AWS_SECRET,
@@ -33,5 +33,9 @@ export const configs = {
     stripe: {
         secretKey: process.env.STRIPE_SECRET_KEY,
         stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET
+    },
+    admin: {
+        email: process.env.ADMIN_EMAIL,
+        password: process.env.ADMIN_PASSWORD
     }
 }

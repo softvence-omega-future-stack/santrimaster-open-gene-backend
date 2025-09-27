@@ -53,7 +53,18 @@ const create_new_donatio = catchAsync(async (req, res) => {
         data: result,
     })
 })
+const get_all_donations = catchAsync(async (req, res) => {
+    const result = await donation_services.get_all_donations_from_db(req)
+    manageResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Donation fetched successfully!',
+        data: result?.data,
+        meta: result?.pagination
+    })
+})
 
 export const donation_controller = {
-    create_new_donatio
+    create_new_donatio,
+    get_all_donations
 }

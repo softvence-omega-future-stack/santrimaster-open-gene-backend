@@ -1,3 +1,4 @@
+import { Request } from "express";
 import Stripe from "stripe";
 import { configs } from "../../configs";
 import { AppError } from "../../utils/app_error";
@@ -67,6 +68,34 @@ const create_new_donation_into_db = async (payload: TDonation) => {
 };
 
 
+const get_all_donations_from_db = async (req: Request) => {
+    // Extract pagination params from query string
+    const page = parseInt((req.query.page as string) || "1", 10);   // default: 1
+    const limit = parseInt((req.query.limit as string) || "10", 10); // default: 10
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated donations
+    const donations = await DonationModel.find({})
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+
+    // Count total documents for pagination info
+    const total = await DonationModel.countDocuments();
+
+    return {
+        data: donations,
+        pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        },
+    };
+};
+
+
 export const donation_services = {
-    create_new_donation_into_db
+    create_new_donation_into_db,
+    get_all_donations_from_db
 }
