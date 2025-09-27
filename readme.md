@@ -1,6 +1,6 @@
 # Project Name : `Open Gene`
 
-Live URL: *https://*
+Live URL: *https://https://santrimaster-open-gene-backend.onrender.com/api*
 
 ---
 
