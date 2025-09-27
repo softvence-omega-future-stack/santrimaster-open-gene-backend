@@ -11,6 +11,7 @@ Live URL: *https://https://santrimaster-open-gene-backend.onrender.com/api*
     - [Account Model](#account-model)
     - [Protocol Model](#protocol-model)
     - [Message Model](#message-model)
+    - [Sponsor Model](#sponsor-model)
 
 
 - [API Endpoints](#api-endpoints)
@@ -31,6 +32,10 @@ Live URL: *https://https://santrimaster-open-gene-backend.onrender.com/api*
     - [Message Endpoints](#message-endpoints)
         - [Send Message](#send-message)
         - [Get All Messages](#get-all-messages)
+    - [Sponsor Endpoints](#sponsor-endpoints)
+        - [Create Sponsor](#create-sponsor)
+        - [Get All Sponsors](#get-all-sponsors)
+        - [Delete Sponsor](#delete-sponsor)
 
 
  ---
@@ -121,6 +126,21 @@ export type TMessage = {
     updatedAt: Date
 };
 ```
+### Sponsor Model
+```ts
+export type TSponsor = {
+    _id:Types.ObjectId
+    companyName: string,
+    contactName: string,
+    email: string,
+    sponsorshipLevel: string,
+    message: string,
+    createdAt: Date,
+    updatedAt: Date
+}
+```
+
+
 
 
 ## API Endpoints
@@ -708,6 +728,96 @@ export type TMessage = {
 {
     "success": true,
     "message": "Protocol deleted successfully!",
+    "data": null,
+    "meta": null
+}
+```
+
+
+### Sponsor Endpoints
+
+#### Create Sponsor
+---
+*Method*: `POST` <br/>
+*Path*: `/sponsor` <br/>
+
+`Request body` - Application/json <br/>
+
+```json
+{
+  "companyName": "TechNova Solutions",
+  "contactName": "Alice Johnson",
+  "email": "alice.johnson@technova.com",
+  "sponsorshipLevel": "Gold",
+  "message": "We are excited to support this initiative and look forward to future collaborations."
+}
+
+``` 
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Sponsor saved successfully!",
+    "data": {
+        "companyName": "TechNova Solutions",
+        "contactName": "Alice Johnson",
+        "email": "alice.johnson@technova.com",
+        "sponsorshipLevel": "Gold",
+        "message": "We are excited to support this initiative and look forward to future collaborations.",
+        "_id": "68d77ee9b4b711c6b001e781",
+        "createdAt": "2025-09-27T06:06:33.777Z",
+        "updatedAt": "2025-09-27T06:06:33.777Z",
+        "__v": 0
+    },
+    "meta": null
+}
+```
+#### Get All Sponsors
+---
+*Method*: `GET` <br/>
+*Path*: `/sponsor` <br/>
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Sponsor fetched successfully!",
+    "data": [
+        {
+            "_id": "68d77ee9b4b711c6b001e781",
+            "companyName": "TechNova Solutions",
+            "contactName": "Alice Johnson",
+            "email": "alice.johnson@technova.com",
+            "sponsorshipLevel": "Gold",
+            "message": "We are excited to support this initiative and look forward to future collaborations.",
+            "createdAt": "2025-09-27T06:06:33.777Z",
+            "updatedAt": "2025-09-27T06:06:33.777Z",
+            "__v": 0
+        },
+        {...}
+    ],
+    "meta": {
+        "total": 1,
+        "page": null,
+        "limit": null,
+        "totalPages": null
+    }
+}
+```
+#### Delete Sponsor
+---
+*Method*: `DELETE` <br/>
+*Path*: `/sponsor/:id` <br/>
+`Note that :` You need to replace `:id` with the actual sponsor id.<br/>
+
+*header* : `Authorization / cookies` // only admin can delete
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Sponsor delete successfully!",
     "data": null,
     "meta": null
 }
