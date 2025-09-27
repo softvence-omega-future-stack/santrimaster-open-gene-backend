@@ -32,14 +32,38 @@ const create = z.object({
     stepProcedure: z.string().min(1, "Step procedure is required"),
     attachment: z.string().optional(),
     license: z.string().min(1, "License is required"),
-    authors: z.instanceof(Types.ObjectId, { message: "Authors must be a valid ObjectId" }),
     coAuthors: z.array(z.instanceof(Types.ObjectId)).optional(),
     isConfirmed: z.boolean({ error: "isConfirmed is required" }),
     isAcknowledged: z.boolean({ error: "isAcknowledged is required" }),
     isConfidential: z.boolean({ error: "isConfidential is required" }),
 });
+const update = z.object({
+  protocolTitle: z.string().min(1, "Protocol title is required").optional(),
+  protocolDescription: z.string().min(1, "Protocol description is required").optional(),
+  category: z.string().min(1, "Category is required").optional(),
+  tags: z.array(z.string().min(1, "Tag is required")).nonempty("At least one tag is required").optional(),
+  technique: z.string().min(1, "Technique is required").optional(),
+  modality: z.string().min(1, "Modality is required").optional(),
+  organism: z.string().min(1, "Organism is required").optional(),
+  phase: z.string().min(1, "Phase is required").optional(),
+  estimatedTime: z.string().min(1, "Estimated time is required").optional(),
+  difficulty: z.string().min(1, "Difficulty is required").optional(),
+  bslLevel: z.string().min(1, "BSL level is required").optional(),
+  materials: z.array(materialSchema).optional(),
+  equipment: z.array(equipmentSchema).optional(),
+  doiLink: z.string().url("DOI link must be a valid URL").optional(),
+  additionalReference: z.string().optional(),
+  stepProcedure: z.string().min(1, "Step procedure is required").optional(),
+  attachment: z.string().optional(),
+  license: z.string().min(1, "License is required").optional(),
+  coAuthors: z.array(z.instanceof(Types.ObjectId)).optional(),
+  isConfirmed: z.boolean().optional(),
+  isAcknowledged: z.boolean().optional(),
+  isConfidential: z.boolean().optional(),
+});
 
 
 export const protocol_validation = {
-    create
+    create,
+    update
 }

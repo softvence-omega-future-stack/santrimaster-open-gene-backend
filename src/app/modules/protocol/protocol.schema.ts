@@ -44,8 +44,8 @@ const ProtocolSchema = new Schema<TProtocol>(
 
         license: { type: String, required: [true, "License is required"] },
 
-        authors: { type: Schema.Types.ObjectId, ref: "User", required: [true, "Authors field is required"] },
-        coAuthors: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        authors: { type: Schema.Types.ObjectId, ref: "account", required: [true, "Authors field is required"] },
+        coAuthors: [{ type: Schema.Types.ObjectId, ref: "account" }],
 
         isConfirmed: { type: Boolean, required: [true, "isConfirmed is required"] },
         isAcknowledged: { type: Boolean, required: [true, "isAcknowledged is required"] },

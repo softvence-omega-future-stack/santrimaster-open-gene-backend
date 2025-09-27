@@ -22,6 +22,12 @@ Live URL: *https://https://santrimaster-open-gene-backend.onrender.com/api*
         - [Reset Password](#reset-password)
         - [Get My Profile](#get-my-profile)
         - [Update Profile](#update-profile)
+    - [Protocol Endpoints](#protocol-endpoints)
+        - [Create Protocol](#create-protocol)
+        - [Get All Protocols](#get-all-protocols)
+        - [Get Single Protocol](#get-single-protocol)
+        - [Update Protocol](#update-protocol)
+        - [Delete Protocol](#delete-protocol)
     - [Message Endpoints](#message-endpoints)
         - [Send Message](#send-message)
         - [Get All Messages](#get-all-messages)
@@ -405,5 +411,304 @@ export type TMessage = {
         "total": 3,
         "totalPages": null
     }
+}
+```
+
+## Protocol Endpoints
+
+#### Create Protocol
+---
+*Method*: `POST` <br/>
+*Path*: `/protocol` <br/>
+**Header**: `Authorization / cookie`<br/>
+`Request body` - Multipart form data <br/>
+
+| Name     | Type   | Description     |
+|----------|--------|-----------------|
+| image | File  | any type of image  |
+|data | Text  | example object  |
+
+
+```json
+{
+  "protocolTitle": "Cell Culture Preparation",
+  "protocolDescription": "This protocol describes the preparation of mammalian cell cultures under sterile conditions.",
+  "category": "Cell Biology",
+  "tags": ["cell culture", "sterile technique", "lab preparation"],
+  "technique": "Aseptic Technique",
+  "modality": "In-vitro",
+  "organism": "Human (HeLa cells)",
+  "phase": "Experimental",
+  "estimatedTime": "2 hours",
+  "difficulty": "Intermediate",
+  "bslLevel": "BSL-2",
+  "materials": [
+    {
+      "itemName": "DMEM Medium",
+      "quantity": 1,
+      "catalog": "12345",
+      "supplier": "Sigma-Aldrich"
+    },
+    {
+      "itemName": "Fetal Bovine Serum (FBS)",
+      "quantity": 1,
+      "catalog": "67890",
+      "supplier": "Thermo Fisher"
+    }
+  ],
+  "equipment": [
+    {
+      "equipmentName": "Laminar Flow Hood",
+      "note": "Class II A2"
+    }
+  ],
+  "doiLink": "https://doi.org/10.1000/j.jmb.2023.05.001",
+  "additionalReference": "Smith J. et al. (2022) Cell Culture Basics.",
+  "stepProcedure": "1. Sterilize hood. 2. Prepare medium. 3. Thaw cells. 4. Plate cells. 5. Incubate at 37°C with 5% CO2.",
+  "attachment": "protocol_steps.pdf",
+  "license": "CC-BY-4.0",
+  "isConfirmed": true,
+  "isAcknowledged": true,
+  "isConfidential": false
+}
+``` 
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Protocol sent successfully!",
+    "data": {
+        ....// your posted data
+        "_id": "68d75bbca576db19b17d5efa",
+        "createdAt": "2025-09-27T03:36:28.086Z",
+        "updatedAt": "2025-09-27T03:36:28.086Z"
+    },
+    "meta": null
+}
+```
+
+#### Get All Protocols
+---
+*Method*: `GET` <br/>
+*Path*: `/protocol` <br/>
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Protocol sent successfully!",
+    "data": [
+        {
+            "_id": "68d75cc5a576db19b17d5f0e",
+            "protocolTitle": "Cell Culture Preparation",
+            "protocolDescription": "This protocol describes the preparation of mammalian cell cultures under sterile conditions.",
+            "category": "Cell Biology",
+            "tags": [
+                "cell culture",
+                "sterile technique",
+                "lab preparation"
+            ],
+            "technique": "Aseptic Technique",
+            "modality": "In-vitro",
+            "organism": "Human (HeLa cells)",
+            "phase": "Experimental",
+            "estimatedTime": "2 hours",
+            "difficulty": "Intermediate",
+            "bslLevel": "BSL-2",
+            "materials": [
+                {
+                    "itemName": "DMEM Medium",
+                    "quantity": 1,
+                    "catalog": "12345",
+                    "supplier": "Sigma-Aldrich"
+                },
+                {
+                    "itemName": "Fetal Bovine Serum (FBS)",
+                    "quantity": 1,
+                    "catalog": "67890",
+                    "supplier": "Thermo Fisher"
+                }
+            ],
+            "equipment": [
+                {
+                    "equipmentName": "Laminar Flow Hood",
+                    "note": "Class II A2"
+                }
+            ],
+            "doiLink": "https://doi.org/10.1000/j.jmb.2023.05.001",
+            "additionalReference": "Smith J. et al. (2022) Cell Culture Basics.",
+            "stepProcedure": "1. Sterilize hood. 2. Prepare medium. 3. Thaw cells. 4. Plate cells. 5. Incubate at 37°C with 5% CO2.",
+            "attachment": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758944446372-Screenshot%202025-08-28%20124535.png",
+            "license": "CC-BY-4.0",
+            "authors": "68d51236d6509568159a4a05",
+            "coAuthors": [],
+            "isConfirmed": true,
+            "isAcknowledged": true,
+            "isConfidential": false,
+            "createdAt": "2025-09-27T03:40:53.819Z",
+            "updatedAt": "2025-09-27T03:40:53.819Z"
+        },
+        {.....}
+    ],
+    "meta": {
+        "total": 6,
+        "page": null,
+        "limit": null,
+        "totalPages": null
+    }
+}
+```
+
+#### Get Single Protocols
+---
+*Method*: `GET` <br/>
+*Path*: `/protocol/:id` <br/>
+
+`Note that :` You need to replace `:id` with the actual protocol id.
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Protocol fetched successfully!",
+    "data": {
+        "_id": "68d75bbca576db19b17d5efa",
+        "protocolTitle": "Cell Culture Preparation",
+        "protocolDescription": "This protocol describes the preparation of mammalian cell cultures under sterile conditions.",
+        "category": "Cell Biology",
+        "tags": [
+            "cell culture",
+            "sterile technique",
+            "lab preparation"
+        ],
+        "technique": "Aseptic Technique",
+        "modality": "In-vitro",
+        "organism": "Human (HeLa cells)",
+        "phase": "Experimental",
+        "estimatedTime": "2 hours",
+        "difficulty": "Intermediate",
+        "bslLevel": "BSL-2",
+        "materials": [
+            {
+                "itemName": "DMEM Medium",
+                "quantity": 1,
+                "catalog": "12345",
+                "supplier": "Sigma-Aldrich"
+            },
+            {
+                "itemName": "Fetal Bovine Serum (FBS)",
+                "quantity": 1,
+                "catalog": "67890",
+                "supplier": "Thermo Fisher"
+            }
+        ],
+        "equipment": [
+            {
+                "equipmentName": "Laminar Flow Hood",
+                "note": "Class II A2"
+            }
+        ],
+        "doiLink": "https://doi.org/10.1000/j.jmb.2023.05.001",
+        "additionalReference": "Smith J. et al. (2022) Cell Culture Basics.",
+        "stepProcedure": "1. Sterilize hood. 2. Prepare medium. 3. Thaw cells. 4. Plate cells. 5. Incubate at 37°C with 5% CO2.",
+        "attachment": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758944185626-Screenshot%202025-08-28%20124535.png",
+        "license": "CC-BY-4.0",
+        "authors": {
+            "_id": "68d51236d6509568159a4a05",
+            "fullName": "Hello jonogon",
+            "affiliation": "236548963",
+            "orcid": "156466",
+            "email": "dev.abumahid@gmail.com",
+            "isDeleted": false,
+            "accountStatus": "ACTIVE",
+            "isTermAgree": false,
+            "role": "GUEST",
+            "additionalInfo": {
+                "isAgree": false
+            },
+            "createdAt": "2025-09-25T09:58:14.987Z",
+            "updatedAt": "2025-09-27T03:30:39.891Z",
+            "lastLoginTime": "2025-09-27T03:30:39.891Z",
+            "lastPasswordChange": "2025-09-25T10:41:42.000Z",
+            "profileImage": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758862921489-Screenshot%202025-08-28%20124535.png"
+        },
+        "coAuthors": [
+            {
+                "_id": "68d51236d6509568159a4a05",
+                "fullName": "Hello jonogon",
+                "affiliation": "236548963",
+                "orcid": "156466",
+                "email": "dev.abumahid@gmail.com",
+                "isDeleted": false,
+                "accountStatus": "ACTIVE",
+                "isTermAgree": false,
+                "role": "GUEST",
+                "additionalInfo": {
+                    "isAgree": false
+                },
+                "createdAt": "2025-09-25T09:58:14.987Z",
+                "updatedAt": "2025-09-27T03:30:39.891Z",
+                "lastLoginTime": "2025-09-27T03:30:39.891Z",
+                "lastPasswordChange": "2025-09-25T10:41:42.000Z",
+                "profileImage": "https://open-gene.s3.eu-north-1.amazonaws.com/photos/1758862921489-Screenshot%202025-08-28%20124535.png"
+            }
+        ],
+        "isConfirmed": true,
+        "isAcknowledged": true,
+        "isConfidential": false,
+        "createdAt": "2025-09-27T03:36:28.086Z",
+        "updatedAt": "2025-09-27T03:36:28.086Z"
+    },
+    "meta": null
+}
+```
+
+
+
+#### Update Protocol
+---
+*Method*: `PATCH` <br/>
+*Path*: `/protocol/:id` <br/>
+*Header*: `Authorization / cookies` <br/>
+`Note that :` You need to replace `:id` with the actual protocol id.
+
+`Request body` - Form data <br/> 
+
+| Key | Type | Description |
+| --- | --- | --- |
+|image|File|any type of image|
+|data|Text|example object|
+
+```json
+// All data are optional 
+```
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Protocol updated successfully!",
+    "data": {
+        ... // updated data here
+    },
+    "meta": null
+}
+```
+
+#### Delete Protocol
+---
+*Method*: `DELETE` <br/>
+*Path*: `/protocol/:id` <br/>
+*Header*: `Authorization / cookies` <br/>
+`Note that :` You need to replace `:id` with the actual protocol id.
+
+*Response*
+```json
+{
+    "success": true,
+    "message": "Protocol deleted successfully!",
+    "data": null,
+    "meta": null
 }
 ```
