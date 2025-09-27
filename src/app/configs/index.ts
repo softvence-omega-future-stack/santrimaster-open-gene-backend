@@ -29,5 +29,9 @@ export const configs = {
         accessKey: process.env.AWS_ACCESS_KEY,
         secret: process.env.AWS_SECRET,
         bucketName: process.env.AWS_BUCKET
+    },
+    stripe: {
+        secretKey: process.env.STRIPE_SECRET_KEY,
+        stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET
     }
 }

@@ -12,6 +12,7 @@ Live URL: *https://https://santrimaster-open-gene-backend.onrender.com/api*
     - [Protocol Model](#protocol-model)
     - [Message Model](#message-model)
     - [Sponsor Model](#sponsor-model)
+    - [Donation Model](#donation-model)
 
 
 - [API Endpoints](#api-endpoints)
@@ -139,7 +140,21 @@ export type TSponsor = {
     updatedAt: Date
 }
 ```
-
+### Donation Model
+```ts
+export type TDonation = {
+    _id:Types.ObjectId
+    donationType: 'ONE_TIME' | 'MONTHLY' | 'ANNUAL',
+    amount: number,
+    donarName: string,
+    donarEmail: string,
+    country: string,
+    tribute: string,
+    paymentStatus: 'PENDING' | 'SUCCESS' | 'FAILED',
+    createdAt: Date,
+    updatedAt: Date
+}
+```
 
 
 
