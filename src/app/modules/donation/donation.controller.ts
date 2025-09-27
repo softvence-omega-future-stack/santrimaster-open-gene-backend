@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 import { configs } from "../../configs";
+import { AppError } from "../../utils/app_error";
 import catchAsync from "../../utils/catch_async";
 import manageResponse from "../../utils/manage_response";
 import { DonationModel } from "./donation.schema";
@@ -18,18 +19,16 @@ export const handleStripeWebhook = async (
     event = stripe.webhooks.constructEvent(
         req.body,
         sig,
-        configs.stripe.stripeWebhookSecret!
+        configs.stripe.stripeWebhookSecret as string
     );
     // ✅ Move usage *after* successful assignment
     if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
-
-        const orderId = session.metadata?.orderId;
+        const orderId = session?.metadata?.orderId;
 
         // ✅ Validate required metadata fields
         if (!orderId) {
-            res.status(400).json({ error: "Missing required metadata" });
-            return;
+            throw new AppError("Missing required metadata fields", 403);
         }
         await DonationModel.findOneAndUpdate(
             { _id: orderId }, // just the ID string

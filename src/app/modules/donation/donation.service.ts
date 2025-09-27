@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { configs } from "../../configs";
+import { AppError } from "../../utils/app_error";
 import { TDonation } from "./donation.interface";
 import { DonationModel } from "./donation.schema";
 
@@ -11,7 +12,7 @@ const createStripeCheckoutSession = async (
     donationId: string
 ) => {
     if (!paymentData?.amount || !paymentData?.donarEmail) {
-        throw new Error("Missing required payment data: amount or email");
+        throw new AppError("Missing required payment data: amount or email", 403);
     }
 
     // 1. Find or create customer
@@ -21,14 +22,14 @@ const createStripeCheckoutSession = async (
     });
 
     const customer =
-        existingCustomer.data[0] ||
+        existingCustomer?.data[0] ||
         (await stripe.customers.create({ email: paymentData.donarEmail }));
 
     // 2. Create checkout session
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
-        customer: customer.id,
+        customer: customer?.id,
         line_items: [
             {
                 price_data: {
@@ -41,12 +42,12 @@ const createStripeCheckoutSession = async (
         ],
         metadata: {
             donationId, // ✅ correct naming
-            customerId: customer.id, // ✅ Stripe customer
-            email: paymentData.donarEmail,
-            amount: paymentData.amount.toString(),
+            customerId: customer?.id, // ✅ Stripe customer
+            email: paymentData?.donarEmail,
+            amount: paymentData?.amount?.toString(),
         },
-        success_url: `${process.env.RESET_BASE_LINK}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.RESET_BASE_LINK}/failed`,
+        success_url: `${configs.jwt.front_end_url as string}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${configs.jwt.front_end_url as string}/failed`,
     });
 
     return session;
