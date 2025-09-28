@@ -32,4 +32,5 @@ export type TProtocol = {
     isConfirmed: boolean,
     isAcknowledged: boolean,
     isConfidential: boolean,
+    status:"PUBLISHED" | "DRAFT" | "REJECTED" | "PENDING"
 }

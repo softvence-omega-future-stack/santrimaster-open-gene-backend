@@ -51,6 +51,15 @@ const delete_protocol = catchAsync(async (req, res) => {
         data: null
     })
 })
+const get_my_all_protocol = catchAsync(async (req, res) => {
+    const result = await protocol_services.get_my_all_protocol_from_db(req)
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Protocol fetched successfully!',
+        data: result
+    })
+})
 
 
 export const protocol_controller = {
@@ -58,5 +67,6 @@ export const protocol_controller = {
     get_all_protocol,
     get_protocol,
     update_protocol,
-    delete_protocol
+    delete_protocol,
+    get_my_all_protocol
 }

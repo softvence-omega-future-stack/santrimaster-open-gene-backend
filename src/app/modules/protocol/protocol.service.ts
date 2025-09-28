@@ -39,7 +39,7 @@ const get_all_protocol_from_db = async (
     limit: number,
     filters: FilterOptions
 ) => {
-    const skip = (page - 1) * limit;
+    const skip = ((page || 1) - 1) * (limit || 10);
 
     // Build dynamic query
     const query: any = {};
@@ -62,14 +62,13 @@ const get_all_protocol_from_db = async (
     if (typeof filters.isAcknowledged === "boolean") query.isAcknowledged = filters.isAcknowledged;
     if (typeof filters.isConfidential === "boolean") query.isConfidential = filters.isConfidential;
 
-    const [protocols, total, allProtocols] = await Promise.all([
+    const [protocols, total] = await Promise.all([
         ProtocolModel.find(query)
             .sort("-createdAt")
             .skip(skip)
             .limit(limit)
             .exec(),
         ProtocolModel.countDocuments(query),
-        ProtocolModel.find()
     ]);
 
 
@@ -77,9 +76,9 @@ const get_all_protocol_from_db = async (
         data: protocols,
         pagination: {
             total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit),
+            page: page || 1,
+            limit: limit || 10,
+            totalPages: Math.ceil(total / (limit || 10)),
         },
     };
 };
@@ -116,11 +115,44 @@ const delete_protocol_into_db = async (req: Request) => {
     return null
 }
 
+const get_my_all_protocol_from_db = async (req: Request) => {
+    const email = req?.user?.email;
+    const isAdminExist = await isAccountExist(email as string)
+    const result = await ProtocolModel.find({ authors: isAdminExist._id }).lean();
+    if (!result) {
+        throw new AppError("Protocol not found", 404);
+    }
+    const draftProtocol = result.filter((protocol) => protocol.status == "DRAFT");
+    const publishedProtocol = result.filter((protocol) => protocol.status == "PUBLISHED");
+    const rejectedProtocol = result.filter((protocol) => protocol.status == "REJECTED");
+    const pendingProtocol = result.filter((protocol) => protocol.status == "PENDING");
+
+    const protocols = {
+        draft: draftProtocol,
+        published: publishedProtocol,
+        rejected: rejectedProtocol,
+        pending: pendingProtocol
+    }
+    const overview = {
+        total: result.length,
+        published: publishedProtocol.length,
+        rejected: rejectedProtocol.length,
+        pending: pendingProtocol.length,
+        draft: draftProtocol.length
+    }
+
+    return {
+        protocols,
+        overview
+    }
+}
+
 
 export const protocol_services = {
     save_new_protocol_into_db,
     get_all_protocol_from_db,
     get_protocol_by_id,
     update_protocol_into_db,
-    delete_protocol_into_db
+    delete_protocol_into_db,
+    get_my_all_protocol_from_db
 }

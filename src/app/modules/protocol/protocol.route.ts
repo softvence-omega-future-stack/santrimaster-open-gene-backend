@@ -20,7 +20,7 @@ protocolRouter.post(
     RequestValidator(protocol_validation.create),
     protocol_controller.save_new_protocol
 )
-protocolRouter.delete("/:id",auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"), protocol_controller.delete_protocol)
+protocolRouter.delete("/:id", auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"), protocol_controller.delete_protocol)
 protocolRouter.patch(
     "/:id",
     auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"),
@@ -35,6 +35,7 @@ protocolRouter.patch(
     protocol_controller.update_protocol
 )
 
+protocolRouter.get("/me", auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"), protocol_controller.get_my_all_protocol)
 protocolRouter.get("/", protocol_controller.get_all_protocol)
 protocolRouter.get("/:id", protocol_controller.get_protocol)
 

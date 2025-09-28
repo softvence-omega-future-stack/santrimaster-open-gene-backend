@@ -50,6 +50,7 @@ const ProtocolSchema = new Schema<TProtocol>(
         isConfirmed: { type: Boolean, required: [true, "isConfirmed is required"] },
         isAcknowledged: { type: Boolean, required: [true, "isAcknowledged is required"] },
         isConfidential: { type: Boolean, required: [true, "isConfidential is required"] },
+        status: { type: String, enum: ["PUBLISHED", "REJECTED", "PENDING", "DRAFT"], default: "PENDING" },
     },
     { timestamps: true, versionKey: false }
 );
