@@ -60,6 +60,7 @@ const update = z.object({
   isConfirmed: z.boolean().optional(),
   isAcknowledged: z.boolean().optional(),
   isConfidential: z.boolean().optional(),
+    status:z.string().optional()
 });
 
 
