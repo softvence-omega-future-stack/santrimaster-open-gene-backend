@@ -5,6 +5,21 @@ import uploadToAWS from "../../utils/s3";
 import { TProtocol } from "./protocol.interface";
 import { ProtocolModel } from "./protocol.schema";
 
+
+interface FilterOptions {
+    search?: string;           // for protocolTitle
+    category?: string;
+    tags?: string[];
+    technique?: string;
+    modality?: string;
+    organism?: string;
+    phase?: string;
+    difficulty?: string;
+    bslLevel?: string;
+    isConfirmed?: boolean;
+    isAcknowledged?: boolean;
+    isConfidential?: boolean;
+}
 const save_new_protocol_into_db = async (req: Request) => {
     const email = req?.user?.email;
     const isAdminExist = await isAccountExist(email as string)
@@ -19,17 +34,44 @@ const save_new_protocol_into_db = async (req: Request) => {
 }
 
 
-const get_all_protocol_from_db = async (page: number, limit: number) => {
+const get_all_protocol_from_db = async (
+    page: number,
+    limit: number,
+    filters: FilterOptions
+) => {
     const skip = (page - 1) * limit;
 
-    const [protocols, total] = await Promise.all([
-        ProtocolModel.find()
+    // Build dynamic query
+    const query: any = {};
+
+    // Search by protocolTitle
+    if (filters.search) {
+        query.protocolTitle = { $regex: filters.search, $options: "i" }; // case-insensitive
+    }
+
+    // Filterable fields
+    if (filters.category) query.category = filters.category;
+    if (filters.tags) query.tags = { $in: filters.tags };
+    if (filters.technique) query.technique = filters.technique;
+    if (filters.modality) query.modality = filters.modality;
+    if (filters.organism) query.organism = filters.organism;
+    if (filters.phase) query.phase = filters.phase;
+    if (filters.difficulty) query.difficulty = filters.difficulty;
+    if (filters.bslLevel) query.bslLevel = filters.bslLevel;
+    if (typeof filters.isConfirmed === "boolean") query.isConfirmed = filters.isConfirmed;
+    if (typeof filters.isAcknowledged === "boolean") query.isAcknowledged = filters.isAcknowledged;
+    if (typeof filters.isConfidential === "boolean") query.isConfidential = filters.isConfidential;
+
+    const [protocols, total, allProtocols] = await Promise.all([
+        ProtocolModel.find(query)
             .sort("-createdAt")
             .skip(skip)
             .limit(limit)
             .exec(),
-        ProtocolModel.countDocuments()
+        ProtocolModel.countDocuments(query),
+        ProtocolModel.find()
     ]);
+
 
     return {
         data: protocols,
@@ -37,11 +79,10 @@ const get_all_protocol_from_db = async (page: number, limit: number) => {
             total,
             page,
             limit,
-            totalPages: Math.ceil(total / limit)
-        }
+            totalPages: Math.ceil(total / limit),
+        },
     };
 };
-
 const get_protocol_by_id = async (id: string) => {
     const protocol = await ProtocolModel.findById(id)
         .populate([

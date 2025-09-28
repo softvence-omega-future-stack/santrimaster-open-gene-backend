@@ -83,8 +83,39 @@ const get_all_donations_from_db = async (req: Request) => {
     // Count total documents for pagination info
     const total = await DonationModel.countDocuments();
 
+    const [totalDonationResult, averageDonationResult, donationCount] = await Promise.all([
+        DonationModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalDonation: { $sum: "$amount" },
+                },
+            },
+        ]),
+        DonationModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    averageDonation: { $avg: "$amount" },
+                },
+            },
+        ]),
+        DonationModel.countDocuments(),
+    ]);
+
+    const totalDonation = totalDonationResult[0]?.totalDonation || 0;
+    const averageDonation = (averageDonationResult[0]?.averageDonation || 0)?.toFixed(2);
+
+    const overview = {
+        totalDonation,
+        averageDonation,
+        donationCount,
+    };
+
+
+
     return {
-        data: donations,
+        data: { donations, overview },
         pagination: {
             total,
             page,

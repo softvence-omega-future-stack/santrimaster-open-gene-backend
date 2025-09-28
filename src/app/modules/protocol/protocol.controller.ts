@@ -23,7 +23,7 @@ const update_protocol = catchAsync(async (req, res) => {
 })
 const get_all_protocol = catchAsync(async (req, res) => {
     const { page, limit } = req?.query
-    const result = await protocol_services.get_all_protocol_from_db(Number(page), Number(limit))
+    const result = await protocol_services.get_all_protocol_from_db(Number(page), Number(limit), req?.query)
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
