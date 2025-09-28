@@ -2,6 +2,8 @@ import { Request } from "express";
 import { AppError } from "../../utils/app_error";
 import { isAccountExist } from "../../utils/isAccountExist";
 import uploadToAWS from "../../utils/s3";
+import { AccountModel } from "../auth/auth.schema";
+import { DonationModel } from "../donation/donation.schema";
 import { TProtocol } from "./protocol.interface";
 import { ProtocolModel } from "./protocol.schema";
 
@@ -43,7 +45,7 @@ const get_all_protocol_from_db = async (
 
     // Build dynamic query
     const query: any = {};
-
+    query.status = "PUBLISHED";
     // Search by protocolTitle
     if (filters.search) {
         query.protocolTitle = { $regex: filters.search, $options: "i" }; // case-insensitive
@@ -148,11 +150,70 @@ const get_my_all_protocol_from_db = async (req: Request) => {
 }
 
 
+const get_admin_overview_data_from_db = async () => {
+
+    const [protocols, users, totalDonation, donar] = await Promise.all([
+        ProtocolModel.find().sort("-createdAt").lean(),
+        AccountModel.find({ role: { $ne: "ADMIN" } }).lean(),
+        DonationModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalDonation: { $sum: "$amount" },
+                },
+            },
+        ]),
+        DonationModel.find().lean()
+    ])
+
+    const overview = {
+        pendingProtocol: protocols?.filter((protocol) => protocol?.status == "PENDING")?.length,
+        draftProtocol: protocols?.filter((protocol) => protocol?.status == "DRAFT")?.length,
+        totalUser: users?.length,
+        totalDonation: totalDonation[0]?.totalDonation
+    }
+    const pendingProtocol = protocols?.filter((protocol) => protocol?.status == "PENDING")?.slice(0, 3);
+    const activity = protocols?.slice(0, 5)?.map((protocol: any) => ({ name: protocol?.protocolTitle, time: protocol?.updatedAt }))
+    const chart = {
+        totalSubmission: protocols?.length || 0,
+        approvedRate: protocols?.length
+            ? (protocols.filter((p) => p?.status === "PUBLISHED").length / protocols.length) * 100
+            : 0,
+        todaySubmission: protocols?.filter((p: any) => {
+            const created = new Date(p?.createdAt);
+            const today = new Date();
+            return created.toDateString() === today.toDateString();
+        }).length || 0
+    };
+
+
+    const donation = {
+        totalDonar: donar?.length || 0,
+        avgDonation: donar?.length
+            ? (totalDonation[0]?.totalDonation / donar.length).toFixed(2)
+            : "0.00",
+        recentDonar: donar?.slice(0, 5)
+    };
+
+
+    return {
+        overview,
+        pendingProtocol,
+        recentActivity: {
+            activity,
+            chart
+        },
+        donation,
+        users: users?.slice(0, 5)
+    };
+}
+
 export const protocol_services = {
     save_new_protocol_into_db,
     get_all_protocol_from_db,
     get_protocol_by_id,
     update_protocol_into_db,
     delete_protocol_into_db,
-    get_my_all_protocol_from_db
+    get_my_all_protocol_from_db,
+    get_admin_overview_data_from_db
 }

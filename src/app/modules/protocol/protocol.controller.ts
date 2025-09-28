@@ -60,6 +60,15 @@ const get_my_all_protocol = catchAsync(async (req, res) => {
         data: result
     })
 })
+const get_admin_overview_data = catchAsync(async (req, res) => {
+    const result = await protocol_services.get_admin_overview_data_from_db()
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Protocol fetched successfully!',
+        data: result
+    })
+})
 
 
 export const protocol_controller = {
@@ -68,5 +77,6 @@ export const protocol_controller = {
     get_protocol,
     update_protocol,
     delete_protocol,
-    get_my_all_protocol
+    get_my_all_protocol,
+    get_admin_overview_data
 }

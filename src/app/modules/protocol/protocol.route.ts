@@ -35,8 +35,9 @@ protocolRouter.patch(
     protocol_controller.update_protocol
 )
 
-protocolRouter.get("/me", auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"), protocol_controller.get_my_all_protocol)
 protocolRouter.get("/", protocol_controller.get_all_protocol)
+protocolRouter.get("/admin-overview", auth("ADMIN"), protocol_controller.get_admin_overview_data)
+protocolRouter.get("/me", auth("ADMIN", "CLINICIAN", "DONAR", "ENGINEER", "REVIEWER", "RESEARCHER", "GUEST"), protocol_controller.get_my_all_protocol)
 protocolRouter.get("/:id", protocol_controller.get_protocol)
 
 
