@@ -101,13 +101,12 @@ const get_protocol_by_id = async (id: string) => {
 
 const update_protocol_into_db = async (req: Request) => {
     const email = req?.user?.email;
-    const isAdminExist = await isAccountExist(email as string)
     const payload: TProtocol = { ...req?.body }
     if (req?.file) {
         const uploadedLink = await uploadToAWS(req?.file);
         payload.attachment = uploadedLink
     }
-    const result = await ProtocolModel.findOneAndUpdate({ authors: isAdminExist._id, _id: req?.params?.id }, payload, { new: true })
+    const result = await ProtocolModel.findOneAndUpdate({ _id: req?.params?.id }, payload, { new: true })
     return result
 }
 const delete_protocol_into_db = async (req: Request) => {
@@ -172,7 +171,7 @@ const get_admin_overview_data_from_db = async () => {
         totalUser: users?.length,
         totalDonation: totalDonation[0]?.totalDonation
     }
-    const pendingProtocol = protocols?.filter((protocol) => protocol?.status == "PENDING")?.slice(0, 3);
+    const pendingProtocol = protocols?.filter((protocol) => protocol?.status == "PENDING");
     const activity = protocols?.slice(0, 5)?.map((protocol: any) => ({ name: protocol?.protocolTitle, time: protocol?.updatedAt }))
     const chart = {
         totalSubmission: protocols?.length || 0,
