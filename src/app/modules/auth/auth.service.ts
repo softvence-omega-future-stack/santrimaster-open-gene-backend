@@ -187,6 +187,9 @@ const reset_password_into_db = async (
 };
 
 
+const delete_user_from_db =async(req : Request)=>{
+    
+}
 
 
 export const auth_services = {

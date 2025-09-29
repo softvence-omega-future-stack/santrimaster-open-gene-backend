@@ -51,5 +51,10 @@ authRoute.post(
     RequestValidator(auth_validation.resetPassword),
     auth_controllers.reset_password,
 );
+authRoute.delete(
+    '/delete-account/:accountId',
+    auth("ADMIN"),
+    auth_controllers.reset_password,
+);
 
 export default authRoute;

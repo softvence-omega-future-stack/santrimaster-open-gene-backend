@@ -152,7 +152,7 @@ const get_my_all_protocol_from_db = async (req: Request) => {
 const get_admin_overview_data_from_db = async () => {
 
     const [protocols, users, totalDonation, donar] = await Promise.all([
-        ProtocolModel.find().sort("-createdAt").lean(),
+        ProtocolModel.find().sort("-createdAt").populate("authors").lean(),
         AccountModel.find({ role: { $ne: "ADMIN" } }).lean(),
         DonationModel.aggregate([
             {
@@ -162,7 +162,7 @@ const get_admin_overview_data_from_db = async () => {
                 },
             },
         ]),
-        DonationModel.find().lean()
+        DonationModel.find().sort("-createdAt").lean()
     ])
 
     const overview = {
