@@ -187,8 +187,14 @@ const reset_password_into_db = async (
 };
 
 
-const delete_user_from_db =async(req : Request)=>{
-    
+const delete_user_from_db = async (req: Request) => {
+    const id = req?.params?.accountId
+    const isUserExist = await AccountModel.findById(id).lean()
+    if (!isUserExist) {
+        throw new AppError("Account not found !", 404)
+    }
+    await AccountModel.findByIdAndDelete(id)
+    return null
 }
 
 
@@ -200,5 +206,6 @@ export const auth_services = {
     change_password_from_db,
     forget_password_from_db,
     reset_password_into_db,
-    update_profile_into_db
+    update_profile_into_db,
+    delete_user_from_db
 }

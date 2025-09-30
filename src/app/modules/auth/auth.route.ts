@@ -19,7 +19,7 @@ authRoute.patch(
         next();
     },
     RequestValidator(auth_validation.update_validation),
-    auth_controllers. update_profile
+    auth_controllers.update_profile
 )
 
 authRoute.post(
@@ -54,7 +54,7 @@ authRoute.post(
 authRoute.delete(
     '/delete-account/:accountId',
     auth("ADMIN"),
-    auth_controllers.reset_password,
+    auth_controllers.delete_user,
 );
 
 export default authRoute;

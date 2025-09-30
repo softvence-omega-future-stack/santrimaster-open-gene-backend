@@ -105,6 +105,15 @@ const reset_password = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const delete_user = catchAsync(async (req, res) => {
+    const result = await auth_services.delete_user_from_db(req);
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User deleted successfully!',
+        data: result,
+    });
+});
 
 
 export const auth_controllers = {
@@ -115,5 +124,6 @@ export const auth_controllers = {
     change_password,
     reset_password,
     forget_password,
-    update_profile
+    update_profile,
+    delete_user
 }
