@@ -9,7 +9,7 @@ import appRouter from './routes';
 // define app
 const app = express()
 app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "http://localhost:5173","https://opengene.netlify.app"],
+    origin: ["http://localhost:5173", "https://opengene.netlify.app", "https://open-gene.com", "https://www.open-gene.com"],
     credentials: true
 }))
 app.use(
