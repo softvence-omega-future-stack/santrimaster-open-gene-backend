@@ -16,8 +16,9 @@ export const configs = {
     },
     db_url: process.env.DB_URL,
     email: {
-        app_email: process.env.APP_USER_EMAIL,
-        app_password: process.env.APP_PASSWORD
+        app_email: process.env.APP_USER,
+        app_password: process.env.APP_PASSWORD,
+        sg_api_key: process.env.SG_API_KEY
     },
     cloudinary: {
         cloud_name: process.env.CLOUD_NAME,

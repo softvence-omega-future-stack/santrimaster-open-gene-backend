@@ -1,9 +1,9 @@
 import { Router } from "express";
+import auth from "../../middlewares/auth";
 import RequestValidator from "../../middlewares/request_validator";
 import uploader from "../../middlewares/uploader";
 import { message_controller } from "./message.controller";
 import { message_validation } from "./message.validation";
-import auth from "../../middlewares/auth";
 
 const messageRouter = Router();
 
@@ -20,7 +20,8 @@ messageRouter.post(
     message_controller.save_new_message
 )
 
-messageRouter.get("/",auth("ADMIN"), message_controller.get_all_message)
+messageRouter.get("/", auth("ADMIN"), message_controller.get_all_message)
+messageRouter.delete("/:messageId", auth("ADMIN"), message_controller.deleteMessage)
 
 
 

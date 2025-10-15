@@ -22,8 +22,18 @@ const get_all_message = catchAsync(async (req, res) => {
         meta: result?.meta
     })
 })
+const deleteMessage = catchAsync(async (req, res) => {
+    const result = await message_services.deleteMessageFromDB(req)
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Message delete successfully!',
+        data: result
+    })
+})
 
 export const message_controller = {
     save_new_message,
-    get_all_message
+    get_all_message,
+    deleteMessage
 }

@@ -37,8 +37,15 @@ const get_all_message_from_db = async (page = 1, limit = 10) => {
     };
 };
 
+const deleteMessageFromDB = async (req: Request) => {
+    const id = req?.params?.messageId
+    const result = await MessageModel.findByIdAndDelete(id)
+    return result
+}
+
 
 export const message_services = {
     save_new_message_into_db,
-    get_all_message_from_db
+    get_all_message_from_db,
+    deleteMessageFromDB
 }

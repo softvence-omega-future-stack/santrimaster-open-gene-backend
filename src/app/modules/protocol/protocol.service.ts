@@ -110,9 +110,7 @@ const update_protocol_into_db = async (req: Request) => {
     return result
 }
 const delete_protocol_into_db = async (req: Request) => {
-    const email = req?.user?.email;
-    const isAdminExist = await isAccountExist(email as string)
-    await ProtocolModel.findOneAndDelete({ authors: isAdminExist._id, _id: req?.params?.id })
+    await ProtocolModel.findOneAndDelete({ _id: req?.params?.id })
     return null
 }
 

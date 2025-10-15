@@ -153,10 +153,8 @@ const forget_password_from_db = async (email: string) => {
         textBody: "Your password is successfully reset.",
         htmlBody: emailTemplate
     });
-
     return 'Check your email for reset link';
 };
-
 const reset_password_into_db = async (
     token: string,
     email: string,
