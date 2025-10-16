@@ -20,7 +20,9 @@ export type TProtocol = {
     }[],
     equipment?: {
         equipmentName: string,
-        note: string
+        note: string,
+        catalog?: string,
+        supplier?: string
     }[],
     doiLink?: string,
     additionalReference?: string,
@@ -32,5 +34,5 @@ export type TProtocol = {
     isConfirmed: boolean,
     isAcknowledged: boolean,
     isConfidential: boolean,
-    status:"PUBLISHED" | "DRAFT" | "REJECTED" | "PENDING"
+    status: "PUBLISHED" | "DRAFT" | "REJECTED" | "PENDING"
 }

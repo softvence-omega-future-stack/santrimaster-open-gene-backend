@@ -6,7 +6,7 @@ const register_validation = z.object({
     password: z.string({ message: "Password is required" }),
     fullName: z.string({ message: "Name is required" }),
     affiliation: z.string({ message: "Affiliation is required" }),
-    orcid: z.string({ message: "Orcid is required" }),
+    orcid: z.string().optional(),
     isTermAgree: z.boolean().optional(),
 });
 

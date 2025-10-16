@@ -5,7 +5,7 @@ import { TAccount } from "./auth.interface";
 const AccountSchema = new Schema<TAccount>({
     fullName: { type: String, required: true },
     affiliation: { type: String, required: true },
-    orcid: { type: String, required: true },
+    orcid: { type: String, required: false },
     bio: { type: String },
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
