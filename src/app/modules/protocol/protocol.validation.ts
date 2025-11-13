@@ -4,8 +4,8 @@ import { z } from "zod";
 const materialSchema = z.object({
     itemName: z.string().min(1, "Item name is required"),
     quantity: z.string({ error: "Quantity is required" }),
-    catalog: z.string().min(1, "Catalog is required"),
-    supplier: z.string().min(1, "Supplier is required"),
+    catalog: z.string().optional(),
+    supplier: z.string().optional(),
 });
 
 const equipmentSchema = z.object({
