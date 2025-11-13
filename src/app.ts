@@ -10,6 +10,7 @@ import appRouter from './routes';
 const app = express()
 app.use(cors({
     origin: ["http://localhost:5173", "https://opengene.netlify.app", "https://open-gene.com", "https://www.open-gene.com"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
 }))
 app.use(
