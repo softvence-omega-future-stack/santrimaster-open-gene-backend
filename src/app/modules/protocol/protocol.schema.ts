@@ -5,8 +5,8 @@ const MaterialSchema = new Schema(
     {
         itemName: { type: String, required: [true, "Item name is required"] },
         quantity: { type: String, required: [true, "Quantity is required"] },
-        catalog: { type: String, required: [true, "Catalog is required"] },
-        supplier: { type: String, required: [true, "Supplier is required"] },
+        catalog: { type: String, required: false},
+        supplier: { type: String, required: false},
     },
     { _id: false, versionKey: false }
 );
